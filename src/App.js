@@ -3,8 +3,7 @@ import './App.css';
 
 import {initializeApp} from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
-
+import { getAuth, signInWithPopup , GoogleAuthProvider } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
@@ -16,8 +15,8 @@ initializeApp({
     messagingSenderId: "564369189985",
     appId: "1:564369189985:web:e46a21d7179c962ee00e20",
     measurementId: "G-4DEHP0MM9V"
-})
-
+  })
+  
 const auth = getAuth();
 const firestore = getFirestore();
 // const analytics = getAnalytics();
@@ -26,10 +25,10 @@ const firestore = getFirestore();
 function App() {
 
   const [user] = useAuthState(auth);
+  // https://firebase.google.com/docs/reference/js/firebase.User
 
   return (
-    <div className="App">igned in, see docs for a list of available properties
-    // https://firebase.google.com/docs/reference/js/firebase.User
+    <div className="App">
     setUser(user);
       <header>
         <h1>💬</h1>
@@ -46,10 +45,12 @@ function App() {
 
 
 function SignIn() {
-
   const signInWithGoogle = () => {
-    const provider = new GoogleAuthProvider();
-    signInWithPopup(provider);
+    const provider = new GoogleAuthProvider;  
+  // provider.setCustomParameters({
+    // prompt: "select_account"
+  // });
+  auth.signInWithPopup(provider)
   }
 
   return (
