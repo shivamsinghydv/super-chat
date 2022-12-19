@@ -3,11 +3,11 @@ import './App.css';
 
 import {initializeApp} from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
-import { getAuth, signInWithPopup , GoogleAuthProvider } from 'firebase/auth';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-initializeApp({
+let app = initializeApp({
     apiKey: "AIzaSyB6_fEOtWFrjaMU8NRZL9XiqK_5EKy0ZwQ",
     authDomain: "suppachat.firebaseapp.com",
     projectId: "suppachat",
@@ -16,7 +16,7 @@ initializeApp({
     appId: "1:564369189985:web:e46a21d7179c962ee00e20",
     measurementId: "G-4DEHP0MM9V"
   })
-  
+
 const auth = getAuth();
 const firestore = getFirestore();
 // const analytics = getAnalytics();
@@ -50,7 +50,7 @@ function SignIn() {
   // provider.setCustomParameters({
     // prompt: "select_account"
   // });
-  auth.signInWithPopup(provider)
+  getAuth.signInWithPopup
   }
 
   return (

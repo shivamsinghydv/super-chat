@@ -1,7 +1,9 @@
 body {
   background-color: #282c34;
 }
-
+noscript{
+  color: white;
+}
 .App {
   text-align: center;
   max-width: 728px;
