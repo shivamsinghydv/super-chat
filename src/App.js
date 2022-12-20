@@ -43,8 +43,9 @@ function App() {
       </header>
 
       <section>
-        <SignIn />
+        
       {/* {user ? <ChatRoom /> : <SignIn />} */}
+      <SignIn />
       </section>
       </AuthContextProvider>
     </div>
@@ -71,7 +72,8 @@ const SignIn = () => {
 
   return (
     <>
-      <button className="sign-in" onClick={handleGoogleSignIn}>Sign in with Google</button>
+      <GoogleButton className="sign-in" onClick={handleGoogleSignIn}/>
+      {/* <button className="sign-in" onClick={handleGoogleSignIn}>Sign in with Google</button> */}
       <p>Do not violate the community guidelines or you will be banned for life!</p>
     </>
   )
