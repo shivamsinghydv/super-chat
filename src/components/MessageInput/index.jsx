@@ -3,7 +3,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { SendMessage } from './sendMesg'
 import './styles.css';
 
-function MessageInput({ roomId }) {
+function MessageInput() {
     const { user } = useAuth();
     const [value, setValue] = React.useState('');
 
@@ -13,7 +13,7 @@ function MessageInput({ roomId }) {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        sendMessage(roomId, user, value);
+        SendMessage(user, value);
         setValue('');
     };
 

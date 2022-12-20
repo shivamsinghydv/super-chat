@@ -2,7 +2,7 @@ import { collection, addDoc, serverTimestamp } from "firebase/firestore";
 import { GoogleAuthProvider, signInWithPopup, getAuth } from 'firebase/auth';
 import { db } from "../../firebase";
 
-const SendMessage = async (roomId, user, text) => {
+const SendMessage = async (user, text) => {
     try {
         await addDoc(collection(db, 'messages'), {
             uid: user.uid,
