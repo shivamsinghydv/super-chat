@@ -65,7 +65,7 @@ function ChatSpace (){
   const [user] = useAuthState(auth);
   return (
         <div className="messages-container">
-          <h2>{user.displayName}</h2>
+          {/* <h2>{user.displayName}</h2> */}
             {/* <MessageInput /> */}
           <ChatRoom />
         </div>
