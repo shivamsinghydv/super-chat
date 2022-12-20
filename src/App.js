@@ -2,31 +2,11 @@ import React, { useEffect, useRef, useState } from 'react';
 import {GoogleButton} from 'react-google-button'
 import './App.css';
 
-import { initializeApp } from 'firebase/app';
-import { auth } from './firebase';
+import { auth, firestore } from './firebase';
 import { signOut } from 'firebase/auth';
-import { UserAuth } from './context/AuthContext';
-import { query, orderBy, limit, collection, addDoc, doc, serverTimestamp, getFirestore } from 'firebase/firestore';
-import { useCollectionData } from 'react-firebase-hooks/firestore';
-import { AuthContextProvider } from './context/AuthContext'; 
+import { AuthContextProvider, UserAuth } from './context/AuthContext';
 import { useAuthState } from 'react-firebase-hooks/auth';
-
-
-
-const firebaseConfig ={
-    apiKey: "AIzaSyB6_fEOtWFrjaMU8NRZL9XiqK_5EKy0ZwQ",
-    authDomain: "suppachat.firebaseapp.com",
-    projectId: "suppachat",
-    storageBucket: "suppachat.appspot.com",
-    messagingSenderId: "564369189985",
-    appId: "1:564369189985:web:e46a21d7179c962ee00e20",
-    measurementId: "G-4DEHP0MM9V"
-  }
-
-const app = initializeApp(firebaseConfig)
-const db = getFirestore(app);
-// const analytics = getAnalytics();
-
+import { useCollectionData } from "react-firebase-hooks/firestore"
 
 function App() {
   const [user] = useAuthState(auth);
@@ -50,9 +30,7 @@ function App() {
       </header>
 
       <section>
-        {user? <NamAste /> : <SignIn />}
-{/*   
-      {user? <ChatRoom />\ : <SignIn />} */}
+      {user? <ChatSpace /> : <SignIn />}
         <p>Do not violate the community guidelines or you will be banned for life!</p>
       </section>
       </AuthContextProvider>
@@ -89,6 +67,57 @@ const NamAste=()=>{
   )
 }
 
+const ChatSpace = () => {
+  const dummy = useRef();
+  // e.preventDefault();
+  // const [messages] = useCollectionData(query, { idField: 'id' });
+  const [formValue] = useState('');
+  const { uid, photoURL } = auth.currentUser;
+  async function sendMessage(user, text) {
+    try {
+      const messageRef = await addDoc(collection(firestore, "messages"), {
+      uid,
+      text: formValue,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+      photoURL      
+      });
+    } catch (error){console.log(error)}
+    // setFormValue('');
+    // dummy.current.scrollIntoView({ behavior: 'smooth' });
+  }
+  async function getmessages(firestore) {
+    const messages = collection(firestore, 'messages');
+    const mesgSnapshot = await getDocs(messages);
+    const mesgList = mesgSnapshot.docs.map(doc => doc.data());
+    return mesgList;
+  }
+};
+
+
+
+const handleSubmit = (event) => {
+  event.preventDefault();
+  sendMessage(roomId, user, value);
+  setValue('');
+
+  return (<div>
+    <main>
+
+      {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
+
+      <span ref={dummy}></span>
+
+    </main>
+
+    <form onSubmit={handleSubmit}>
+
+      <input value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="say something nice" />
+
+      <button type="submit" disabled={!formValue}>🕊️</button>
+
+    </form>
+  </div>)
+}
 
 function ChatMessage(props) {
   const { text, uid, photoURL } = props.message;
