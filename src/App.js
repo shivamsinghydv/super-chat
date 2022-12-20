@@ -1,135 +1,92 @@
-import React, { useRef, useState } from 'react';
-import './App.css';
+import React, { useEffect, useRef, useState } from 'react';
 import {GoogleButton} from 'react-google-button'
+import './App.css';
 
-import { useCollectionData } from 'react-firebase-hooks/firestore';
-import { getFirestore } from 'firebase/firestore';
+import { initializeApp } from 'firebase/app';
+import { auth } from './firebase';
+import { signOut } from 'firebase/auth';
 import { UserAuth } from './context/AuthContext';
-import { AuthContextProvider } from './context/AuthContext';
-import { async } from '@firebase/util';
-// import {initializeApp} from 'firebase/app';
-// import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider } from 'firebase/auth';
-// import { useAuthState } from 'react-firebase-hooks/auth';
-
-// const firebaseApp = initializeApp({
-//     apiKey: "AIzaSyB6_fEOtWFrjaMU8NRZL9XiqK_5EKy0ZwQ",
-//     authDomain: "suppachat.firebaseapp.com",
-//     projectId: "suppachat",
-//     storageBucket: "suppachat.appspot.com",
-//     messagingSenderId: "564369189985",
-//     appId: "1:564369189985:web:e46a21d7179c962ee00e20",
-//     measurementId: "G-4DEHP0MM9V"
-//   })
+import { query, orderBy, limit, collection, addDoc, doc, serverTimestamp, getFirestore } from 'firebase/firestore';
+import { useCollectionData } from 'react-firebase-hooks/firestore';
+import { AuthContextProvider } from './context/AuthContext'; 
+import { useAuthState } from 'react-firebase-hooks/auth';
 
 
-// const auth = getAuth(firebaseApp);
 
-const firestore = getFirestore();
+const firebaseConfig ={
+    apiKey: "AIzaSyB6_fEOtWFrjaMU8NRZL9XiqK_5EKy0ZwQ",
+    authDomain: "suppachat.firebaseapp.com",
+    projectId: "suppachat",
+    storageBucket: "suppachat.appspot.com",
+    messagingSenderId: "564369189985",
+    appId: "1:564369189985:web:e46a21d7179c962ee00e20",
+    measurementId: "G-4DEHP0MM9V"
+  }
+
+const app = initializeApp(firebaseConfig)
+const db = getFirestore(app);
 // const analytics = getAnalytics();
 
 
 function App() {
-
-  // const [user] = useAuthState(auth);
-  // https://firebase.google.com/docs/reference/js/firebase.User
+  const [user] = useAuthState(auth);
+  const handleSignOut = async ()=>{
+    try{
+      await signOut(auth);
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   return (
     <div className="App">
-    setUser(user);
       <AuthContextProvider>
+    {/* setUser(currentUser); */}
       <header>
         <h1>💬</h1>
-        {/* <SignOut /> */}
+        <h3>{user?.displayName}</h3>
+        {user? <button onClick={handleSignOut}>LogOut</button>: <></>}
+        
       </header>
 
       <section>
-        
-      {/* {user ? <ChatRoom /> : <SignIn />} */}
-      <SignIn />
+        {user? <NamAste /> : <SignIn />}
+{/*   
+      {user? <ChatRoom />\ : <SignIn />} */}
+        <p>Do not violate the community guidelines or you will be banned for life!</p>
       </section>
       </AuthContextProvider>
     </div>
   );
 }
 
-
 const SignIn = () => {
-  const {googleSignIn} = UserAuth();
+  const { googleSignIn, user } = UserAuth();
   const handleGoogleSignIn = async () =>{
     try{
       await googleSignIn();
     }catch(error){
       console.log(error);
     }
-  }
-  // const signInWithGoogle = () => {
-    // const provider = new GoogleAuthProvider;  
-  // provider.setCustomParameters({
-    // prompt: "select_account"
-  // });
-  // getAuth.signInWithPopup
-  // }
-
+  };
+  
   return (
     <>
       <GoogleButton className="sign-in" onClick={handleGoogleSignIn}/>
       {/* <button className="sign-in" onClick={handleGoogleSignIn}>Sign in with Google</button> */}
-      <p>Do not violate the community guidelines or you will be banned for life!</p>
     </>
   )
 
 }
 
-// function SignOut() {
-//   return auth.currentUser && (
-//     <button className="sign-out" onClick={() => auth.signOut()}>Sign Out</button>
-//   )
-// }
-
-
-function ChatRoom() {
-  const dummy = useRef();
-  const messagesRef = doc('messages');
-  const query = messagesRef.orderBy('createdAt').limit(25);
-
-  const [messages] = useCollectionData(query, { idField: 'id' });
-
-  const [formValue, setFormValue] = useState('');
-
-
-  const sendMessage = async (e) => {
-    e.preventDefault();
-
-    const { uid, photoURL } = auth.currentUser;
-
-    await messagesRef.add({
-      text: formValue,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      uid,
-      photoURL
-    })
-
-    setFormValue('');
-    dummy.current.scrollIntoView({ behavior: 'smooth' });
-  }
-
+const NamAste=()=>{
   return (<>
-    <main>
-
-      {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
-
-      <span ref={dummy}></span>
-
-    </main>
-
-    <form onSubmit={sendMessage}>
-
-      <input value={formValue} onChange={(e) => setFormValue(e.target.value)} placeholder="say something nice" />
-
-      <button type="submit" disabled={!formValue}>🕊️</button>
-
-    </form>
-  </>)
+    <div>
+      <h2>
+        Full features of this app coming soon...
+      </h2>
+    </div></>
+  )
 }
 
 

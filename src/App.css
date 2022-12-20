@@ -107,6 +107,9 @@ button:disabled {
   background: white;
   max-width: 400px;
   margin: 0 auto;
+  border-radius: 8px;
+  margin-top: 20px;
+  text-decoration: double;
 }
 
 
@@ -117,7 +120,7 @@ ul, li {
   list-style: none;
 }
 
-p {
+h2, p {
   max-width: 500px;
   margin-bottom: 12px;
   line-height: 24px;
