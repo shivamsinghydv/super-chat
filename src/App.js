@@ -7,7 +7,7 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { useAuthState } from 'react-firebase-hooks/auth';
 import { useCollectionData } from 'react-firebase-hooks/firestore';
 
-let app = initializeApp({
+initializeApp({
     apiKey: "AIzaSyB6_fEOtWFrjaMU8NRZL9XiqK_5EKy0ZwQ",
     authDomain: "suppachat.firebaseapp.com",
     projectId: "suppachat",
@@ -55,7 +55,7 @@ function SignIn() {
 
   return (
     <>
-      <button className="sign-in" onClick={signInWithGoogle}>Sign in with Google</button>
+      <button className="sign-in" onClick={signInWithGoogle()}>Sign in with Google</button>
       <p>Do not violate the community guidelines or you will be banned for life!</p>
     </>
   )
