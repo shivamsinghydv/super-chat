@@ -18,15 +18,15 @@ export const AuthContextProvider = ({ children }) => {
     signInWithPopup(auth, provider);
     // signInWithRedirect(auth, provider)
   };
-
+  
   const logOut = () => {
-      signOut(auth)
+    signOut(auth)
   }
-
+  
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
-      console.log('User', currentUser)
+      console.log('User', currentUser.displayName)
     });
     return () => {
       unsubscribe();
@@ -42,4 +42,4 @@ export const AuthContextProvider = ({ children }) => {
 
 export const UserAuth = () => {
   return useContext(AuthContext);
-};
+  };

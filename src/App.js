@@ -1,12 +1,15 @@
 import React, { useEffect, useRef, useState } from 'react';
-import {GoogleButton} from 'react-google-button'
 import './App.css';
-
-import { auth, firestore } from './firebase';
+import {GoogleButton} from 'react-google-button'
+import { auth, db } from './firebase';
 import { signOut } from 'firebase/auth';
 import { AuthContextProvider, UserAuth } from './context/AuthContext';
 import { useAuthState } from 'react-firebase-hooks/auth';
-import { useCollectionData } from "react-firebase-hooks/firestore"
+import { getFirestore, query, orderBy, limit, getDocs, collection, addDoc, serverTimestamp } from "firebase/firestore"; 
+import { MessageInput } from './components/MessageInput';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { SendMessage} from './components/MessageInput/sendMesg'
+
 
 function App() {
   const [user] = useAuthState(auth);
@@ -57,47 +60,35 @@ const SignIn = () => {
 
 }
 
-const NamAste=()=>{
-  return (<>
-    <div>
-      <h2>
-        Full features of this app coming soon...
-      </h2>
-    </div></>
-  )
+
+function ChatSpace (){
+  const [user] = useAuthState(auth);
+  return (
+        <div className="messages-container">
+          <h2>{user.displayName}</h2>
+            {/* <MessageInput /> */}
+          <ChatRoom />
+        </div>
+  )   
 }
+//   return (
+//     <>
+//         <div>
+//         </div>
+//     </>
+// );
 
-const ChatSpace = () => {
-  const dummy = useRef();
-  // e.preventDefault();
-  // const [messages] = useCollectionData(query, { idField: 'id' });
-  const [formValue] = useState('');
-  const { uid, photoURL } = auth.currentUser;
-  async function sendMessage(user, text) {
-    try {
-      const messageRef = await addDoc(collection(firestore, "messages"), {
-      uid,
-      text: formValue,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      photoURL      
-      });
-    } catch (error){console.log(error)}
-    // setFormValue('');
-    // dummy.current.scrollIntoView({ behavior: 'smooth' });
-  }
-  async function getmessages(firestore) {
-    const messages = collection(firestore, 'messages');
-    const mesgSnapshot = await getDocs(messages);
-    const mesgList = mesgSnapshot.docs.map(doc => doc.data());
-    return mesgList;
-  }
-};
-
+function ChatRoom() {
+  // console.log('Heli')
+  return <div>
+    <MessageInput />
+  </div>;
+}
 
 
 const handleSubmit = (event) => {
   event.preventDefault();
-  sendMessage(roomId, user, value);
+  SendMessage(roomId, user, value);
   setValue('');
 
   return (<div>
@@ -119,17 +110,19 @@ const handleSubmit = (event) => {
   </div>)
 }
 
-function ChatMessage(props) {
-  const { text, uid, photoURL } = props.message;
 
-  const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
 
-  return (<>
-    <div className={`message ${messageClass}`}>
-      <p>{text}</p>
-    </div>
-  </>)
-}
+// function ChatMessage(props) {
+//   const { text, uid, photoURL } = props.message;
+
+//   const messageClass = uid === auth.currentUser.uid ? 'sent' : 'received';
+
+//   return (<>
+//     <div className={`message ${messageClass}`}>
+//       <p>{text}</p>
+//     </div>
+//   </>)
+// }
 
 
 export default App;
