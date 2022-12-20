@@ -9,6 +9,7 @@ import { getFirestore, query, orderBy, limit, getDocs, collection, addDoc, serve
 import { MessageInput } from './components/MessageInput';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { SendMessage} from './components/MessageInput/sendMesg'
+import { MessageList } from './components/MessageList';
 
 
 function App() {
@@ -34,7 +35,7 @@ function App() {
 
       <section>
       {user? <ChatSpace /> : <SignIn />}
-        <p>Do not violate the community guidelines or you will be banned for life!</p>
+        
       </section>
       </AuthContextProvider>
     </div>
@@ -54,6 +55,7 @@ const SignIn = () => {
   return (
     <>
       <GoogleButton className="sign-in" onClick={handleGoogleSignIn}/>
+      <p>Do not violate the community guidelines or you will be banned for life!</p>
       {/* <button className="sign-in" onClick={handleGoogleSignIn}>Sign in with Google</button> */}
     </>
   )
@@ -67,7 +69,8 @@ function ChatSpace (){
         <div className="messages-container">
           {/* <h2>{user.displayName}</h2> */}
             {/* <MessageInput /> */}
-          <ChatRoom />
+        <MessageList />
+        <MessageInput />
         </div>
   )   
 }
@@ -78,12 +81,7 @@ function ChatSpace (){
 //     </>
 // );
 
-function ChatRoom() {
-  // console.log('Heli')
-  return <div>
-    <MessageInput />
-  </div>;
-}
+
 
 
 const handleSubmit = (event) => {
