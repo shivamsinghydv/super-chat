@@ -14,26 +14,14 @@ import { MessageList } from './components/MessageList';
 
 function App() {
   const [user] = useAuthState(auth);
-  const handleSignOut = async ()=>{
-    try{
-      await signOut(auth);
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
   return (
     <div className="App">
       <AuthContextProvider>
     {/* setUser(currentUser); */}
-      <header>
-        <h1>💬</h1>
-        <h3>{user?.displayName}</h3>
-        {user? <button onClick={handleSignOut}>LogOut</button>: <></>}
-        
-      </header>
-
       <section>
+        <header>
+          <Header />
+        </header>
       {user? <ChatSpace /> : <SignIn />}
         
       </section>
@@ -62,6 +50,22 @@ const SignIn = () => {
 
 }
 
+const Header = () => {
+  const [user] = useAuthState(auth);
+  const handleSignOut = async ()=>{
+    try{
+      await signOut(auth);
+    } catch (error) {
+      console.log(error)
+    }
+  }
+  return (<>
+      {user? <img src={user?.photoURL} /> : <h2>💬</h2>}
+      <h3>{user?.displayName}</h3>
+      {user? <button onClick={handleSignOut}>LogOut</button>: <></>}
+        
+    </>)
+}
 
 function ChatSpace (){
   const [user] = useAuthState(auth);
@@ -74,12 +78,6 @@ function ChatSpace (){
         </div>
   )   
 }
-//   return (
-//     <>
-//         <div>
-//         </div>
-//     </>
-// );
 
 
 
